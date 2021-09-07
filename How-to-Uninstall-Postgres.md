@@ -14,4 +14,3 @@ Uninstall packages listed by that command by executing:
 ```bash
 sudo apt-get --purge remove postgresql-9.4 postgresql-client-9.4 postgresql-client-common postgresql-common postgresql-contrib-9.4
 ```
-![Purge all PostgreSQL dependencies](../images/purge_all_psql.png)
