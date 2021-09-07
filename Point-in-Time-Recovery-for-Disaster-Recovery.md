@@ -39,7 +39,6 @@ You will need to have two hosts with PostgreSQL. Let's say the `master` will be 
 
 - Check that the replication user is indeed created by typing `\du`
 
-![Check replication user](../images/check_replication_user.png)
 
 - Exit the `psql` prompt
 
@@ -71,7 +70,7 @@ You will need to have two hosts with PostgreSQL. Let's say the `master` will be 
     #local   replication     postgres                                peer
     #host    replication     postgres        127.0.0.1/32            md5
     #host    replication     postgres        ::1/128                 md5
-    host    replication     replication     10.119.234.68/32        md5
+    host    replication     replication     (address for host replication)        md5
     ```
 
     Save the file and exit
@@ -161,7 +160,7 @@ $ nano pg_hba.conf
     #local   replication     postgres                                peer
     #host    replication     postgres        127.0.0.1/32            md5
     #host    replication     postgres        ::1/128                 md5
-    host    replication     replication     10.119.234.62/32        md5
+    host    replication     replication     (address for host replication)        md5
 
 $ nano postgresql.conf
 
@@ -261,8 +260,6 @@ $ psql
 postgres=# select * from pg_stat_replication;
 ```
 
-![Check replication status](../images/check_replication_status.png)
-
 ## **WAL Archiving for Point In Time Recovery (PITR)**
 
 ### **Configuration on Master**
@@ -273,7 +270,7 @@ postgres=# select * from pg_stat_replication;
 # turning on archive_mode will run archive_command each time a WAL segment is completed
 archive_mode = on
 # archive_command might be anything from simple cp to rsync
-archive_command = 'test ! -f postgres@10.119.234.68:/var/lib/postgresql/wal_archive/%f && rsync –avz %p postgres@10.119.234.34:/var/lib/postgresql/wal_archive/%f'
+archive_command = 'test ! -f postgres@(address):/var/lib/postgresql/wal_archive/%f && rsync –avz %p postgres@(address):/var/lib/postgresql/wal_archive/%f'
 ```
 Don't forget to actually create folders the scripts are pointing to.
 To check whether the archived WAL is actually sent on the slave, you can run this command on the primary database:
@@ -290,7 +287,7 @@ psql -c "select pg_switch_wal();"
 
 Archived WAL segments need a base backup they can be run on. Without a base backup, they are worthless.
 
-`pg_basebackup` takes base backup of PostgreSQL cluster. If the database cluster in the `PITR` host is set to streaming replication, it is best to take the base backup from the `PITR` host to reduce the load on the main database. In our example of two database however, that is not possible. Hence, we'll take the base backup from the main database cluster which is hosted in the `10.119.234.62`.
+`pg_basebackup` takes base backup of PostgreSQL cluster. If the database cluster in the `PITR` host is set to streaming replication, it is best to take the base backup from the `PITR` host to reduce the load on the main database. In our example of two database however, that is not possible. Hence, we'll take the base backup from the main database cluster which is hosted in the `(address)`.
 
 
 ```bash
@@ -340,7 +337,7 @@ Eventhough there is already a `recovery.conf` from the base backup, to actually 
 
 ```bash
 standby_mode = 'on'
-primary_conninfo = 'host=10.119.234.33 port=5432 user=replication password=password application_name=pg_slave'
+primary_conninfo = 'host=(address) port=5432 user=replication password=password application_name=pg_slave'
 trigger_file = '/tmp/postgresql.trigger.5432'
 
 # Add the following settings
