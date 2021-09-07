@@ -223,7 +223,7 @@ With this, we can restore the old data directory back when things don't go as pl
 Now, execute `pg_basebackup` utility:
 
 ```bash
-pg_basebackup -h 10.119.234.62 -U replication -D /var/lib/postgresql/9.4/main -P -p 5433
+pg_basebackup -h (address) -U replication -D /var/lib/postgresql/9.4/main -P -p 5433
 ```
 Give the password we set previously on the `master` when prompted.
 
@@ -233,7 +233,7 @@ Now, we need to prepare a recovery.conf file which will let the slave connect to
 
 ```bash
 standby_mode = 'on'
-primary_conninfo = 'host=10.119.234.62 port=5432 user=replication password=password'
+primary_conninfo = 'host=(address) port=5432 user=replication password=password'
 trigger_file = '/tmp/failover.trigger'
 ```
 
