@@ -21,4 +21,4 @@ Create a user for replication in the Master. It is discouraged to use superuser 
 => chrollolucifer
 
 Allow replication connections from Standby to Master by appending similar line as following to the `pg_hba.conf`:
-`host replication replicator  10.119.234.68/32  md5`
+`host replication replicator  (address)  md5`
