@@ -21,7 +21,6 @@ Install the PostrgeSQL:
 ```bash
 $ sudo apt-get install postgres
 ```
-![Install postgres](../images/postgre_12_installation.png)
 
 As you can see, `sudo apt-get install postgres` will install additional packages. Depends on your need, you may not want to install those packages. In that case, you can install specific `postgres` packages manually like:
 ```bash
