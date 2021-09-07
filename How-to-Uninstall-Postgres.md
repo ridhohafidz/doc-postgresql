@@ -3,13 +3,11 @@
 ```bash
 sudo apt-get --purge remove postgresql
 ```
-![Remove postgresl](../images/remove_postgresql.png)
 
 In case that doesn't do the trick, try listing all PostgreSQL related software and dependencies by executing this command:
 ```bash
 dpkg -l | grep postgres
 ```
-![List PostgreSQL software](../images/list_postgresql_software.png)
 
 
 Uninstall packages listed by that command by executing:
